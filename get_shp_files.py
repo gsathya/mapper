@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# Use this to download zillow data
+
 import urllib
 
 urls = "http://www.zillow.com/static/shp/ZillowNeighborhoods-%s.zip"
@@ -48,5 +51,7 @@ states = [
 
 for state in states:
     url = urls % state
-    print url
+    print "Downloading - %s" % url
     urllib.urlretrieve(url, state.lower()+'.zip')
+
+print "Done"
