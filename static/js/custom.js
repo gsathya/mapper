@@ -7,8 +7,11 @@ var osmAttr = '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contr
 // download those tiles!
 var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
+// create a control panel to show neighborhood
+var info = L.control();
+
 // all our point data
-var points = []
+var points = [];
 
 function onMapClick(e) {
     var marker = L.marker(e.latlng).addTo(map);
@@ -47,10 +50,39 @@ function plot_neighborhoods(start, end){
     // find the locations of neighborhoods
     $.get("/location", data)
         .done(function(data){
-            L.geoJson(data['counties']).addTo(map);
+            L.geoJson(data['counties'], {onEachFeature: onEachFeature}).addTo(map);
         });
 }
 
+function showNeighborhood(e) {
+    var layer = e.target;
+    info.update(layer.feature.properties);
+}
+
+function clearNeighborhood(e) {
+    info.update();
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: showNeighborhood,
+        mouseout: clearNeighborhood
+    });
+}
+
+// data info control panel
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    this._div.innerHTML = '<h4>'+ (props? props.title: 'Hover over a neighborhood') +'</h4>';
+};
+
+info.addTo(map);
 // set up our map
 L.tileLayer(osmUrl, {
     attribution: osmAttr,

@@ -48,9 +48,12 @@ def get_locations():
 
         for id, place in enumerate(find_counties(line)):
             county = {}
+            county['properties'] = {
+                'title': place[1],
+            }
+
             county['type'] = 'Feature'
             county['id'] = id
-            county['properties'] = {'name': place[1]}
             county['geometry'] = mapping(place[0])
             counties['features'].append(county)
 
