@@ -83,18 +83,26 @@ def find_counties(line):
 
 def usage():
     print "$python shaper.py server /path/to/data"
-    print "$python shaper.py /path/to/data lat1 long1 lat2 long2"
+    print "$python shaper.py /path/to/data long1 lat1 long2 lat2"
 
 if __name__ == '__main__':
+    # use the webapp
     if len(sys.argv) == 3 and sys.argv[1] == "server":
         data_dir = sys.argv[2]
+        # load the data
         load(data_dir)
+
+        # start the server
         app.run(debug=True)
+
+    # use this as a cli app
     elif len(sys.argv) == 6:
         try:
+            #load the data
             data_dir = sys.argv[1]
             load(data_dir)
-        
+
+            # find our points and create the line
             start = Point(float(sys.argv[2]), float(sys.argv[3]))
             end = Point(float(sys.argv[4]), float(sys.argv[5]))
             line = LineString([start, end])
@@ -104,5 +112,6 @@ if __name__ == '__main__':
 
         for county, name in find_counties(line):
             print name
+    # ok, we need to teach the user how to use this
     else:
         usage()
