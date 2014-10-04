@@ -9,7 +9,7 @@ from shapely.geometry import Point, LineString, shape, MultiPolygon
 app = Flask(__name__)
 
 @app.route("/")
-def hello():
+def home():
     return "Hello World!"
 
 def run(data_dir, line):
