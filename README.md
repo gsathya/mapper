@@ -18,3 +18,7 @@ Map the neighbourhoods between two given (lat, long) co-ords
     * $ brew install geos
     * $ pip install cython numpy fiona shapely flask    
     * $ python shaper.py server data
+
+## Easter egg(?)
+
+This also runs as a cli!
