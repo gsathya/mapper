@@ -3,14 +3,25 @@ import os
 
 import fiona
 
-from flask import Flask
+from flask import Flask, send_from_directory
 from shapely.geometry import Point, LineString, shape, MultiPolygon
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return "Hello World!"
+@app.route("/", methods=["GET"])
+def main():
+    path = os.path.abspath(os.path.dirname( __file__ ))
+    return send_from_directory(path, "index.html")
+
+@app.route("/css/<file>", methods=["GET"])
+def get_css(file):
+    path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'static' , "css"))
+    return send_from_directory(path, file)
+
+@app.route("/js/<file>", methods=["GET"])
+def get_js(file):
+    path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), 'static', "js"))
+    return send_from_directory(path, file)
 
 def run(data_dir, line):
     for file_name in os.listdir(data_dir):
@@ -30,7 +41,7 @@ def usage():
 
 if __name__ == '__main__':
     if len(sys.argv) == 2 and sys.argv[1] == "server":
-        app.run()
+        app.run(debug=True)
     elif len(sys.argv) == 6:
         data_dir = sys.argv[1]
 
