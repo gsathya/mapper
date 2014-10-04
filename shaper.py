@@ -65,17 +65,19 @@ def load(data_dir):
             continue
 
         file_path = os.path.join(data_dir, file_name)
-        with fiona.open(file_path, "r") as input:
-            for f in input:
-                neighborhood = shape(f['geometry'])
-                polygons.append((neighborhood, f['properties']['NAME']))
+        with fiona.open(file_path, "r") as input_fh:
+            for data in input_fh:
+                # get the co-ordinates
+                neighborhood = shape(data['geometry'])
+                # append the co-ords and the name
+                polygons.append((neighborhood, data['properties']['NAME']))
 
 def find_counties(line):
     county = []
 
-    for polygon in polygons:
-        if line.intersects(polygon[0]):
-            county.append(polygon)
+    for polygon, name in polygons:
+        if line.intersects(polygon):
+            county.append((polygon, name))
 
     return county
 
