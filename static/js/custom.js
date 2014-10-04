@@ -1,5 +1,5 @@
 // create a new map
-var map = L.map('map').setView([51.505, -0.09], 3);
+var map = L.map('map').setView([37.8, -96], 4);
 
 // attribute
 var osmAttr = '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>';
