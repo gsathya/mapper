@@ -7,9 +7,11 @@ from flask import Flask, send_from_directory, request, jsonify
 from shapely.geometry import Point, LineString, shape, MultiPolygon, mapping
 
 app = Flask(__name__)
+
+# this is list of data we load into memory on startup
 polygons = []
 
-@app.route("/", methods=["GET"])
+@app.route("/")
 def main():
     path = os.path.abspath(os.path.dirname( __file__ ))
     return send_from_directory(path, "index.html")
