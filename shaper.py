@@ -28,6 +28,7 @@ def get_js(file):
 
 @app.route("/location")
 def get_locations():
+    # counties is our GeoJSON
     counties = {}
     counties['type'] = 'FeatureCollection'
     counties['features'] = []
@@ -35,18 +36,22 @@ def get_locations():
     args = request.args
 
     try:
-        start = Point(float(args.get('start_long')), float(args.get('start_lat')))
-        end = Point(float(args.get('end_long')), float(args.get('end_lat')))
+        start_long = float(args.get('start_long'))
+        start_lat = float(args.get('start_lat'))
+        start = Point(start_long, start_lat)
+
+        end_long = float(args.get('end_long'))
+        end_lat = float(args.get('end_lat'))
+        end = Point(end_long, end_lat)
     
         line = LineString([start, end])
 
-        for id, n in enumerate(find_counties(line)):
+        for id, place in enumerate(find_counties(line)):
             county = {}
-            print n[1]
             county['type'] = 'Feature'
             county['id'] = id
-            county['properties'] = {'name': n[1]}
-            county['geometry'] = mapping(n[0])
+            county['properties'] = {'name': place[1]}
+            county['geometry'] = mapping(place[0])
             counties['features'].append(county)
 
     except Exception, e:
